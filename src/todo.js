@@ -12,7 +12,7 @@ export class Todo {
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    Todo.addNewTodo(this)
+    Todo.addToAllList(this)
   }
 
   static find(uuid) {
@@ -20,7 +20,7 @@ export class Todo {
     console.log(this.allTodos)
   }
 
-  static addNewTodo(todo) {
+  static addToAllList(todo) {
     this.allTodos.push(todo)
   }
 }
