@@ -18,6 +18,9 @@ export class Project {
   static find(uuid) {
     console.log(uuid)
     console.log(this.allProjects)
+    this.allProjects.fil
+    const index = this.allProjects.findIndex((proj) => proj.uuid == uuid)
+    return this.allProjects[index]
   }
 
   static addToAllList(todo) {
