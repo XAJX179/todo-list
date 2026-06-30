@@ -38,28 +38,33 @@ export const Display = (
 
     function createProjectTodosItems(project) {
       project.todoList.forEach((todo) => {
-        let todoItem = document.createElement('li')
-        let todoItemHeading = document.createElement('h3')
-        let todoItemDescription = document.createElement('p')
-        let todoItemDueDate = document.createElement('p')
-        let todoItemPriority = document.createElement('p')
-        let todoItemEditButton = document.createElement('button')
-        todoItem.append(todoItemHeading)
-        todoItem.append(todoItemDescription)
-        todoItem.append(todoItemDueDate)
-        todoItem.append(todoItemPriority)
-        todoItem.append(todoItemEditButton)
-        todoList.append(todoItem)
-
-        todoItemHeading.textContent = todo.title
-        todoItemDescription.textContent = todo.description
-        todoItemDueDate.textContent = todo.dueDate
-        todoItemPriority.textContent = todo.priority
-        todoItemEditButton.textContent = "Edit"
-        todoItem.dataset.id = todo.uuid
+        createTodo(todo)
       })
       todoListHeading.textContent = project.name + " Todos"
       todoListHeading.dataset.projectId = project.uuid
+    }
+
+    function createTodo(todo) {
+      let todoItem = document.createElement('li')
+      let todoItemHeading = document.createElement('h3')
+      let todoItemDescription = document.createElement('p')
+      let todoItemDueDate = document.createElement('p')
+      let todoItemPriority = document.createElement('p')
+      let todoItemEditButton = document.createElement('button')
+      todoItem.append(todoItemHeading)
+      todoItem.append(todoItemDescription)
+      todoItem.append(todoItemDueDate)
+      todoItem.append(todoItemPriority)
+      todoItem.append(todoItemEditButton)
+      todoList.append(todoItem)
+
+      todoItemHeading.textContent = todo.title
+      todoItemDescription.textContent = todo.description
+      todoItemDueDate.textContent = todo.dueDate
+      todoItemPriority.textContent = todo.priority
+      todoItemEditButton.textContent = "Edit"
+      todoItem.dataset.id = todo.uuid
+      return todoItem
     }
 
     function setEvents() {
@@ -72,8 +77,22 @@ export const Display = (
         newProjectDialog.close()
       })
 
+      todoList.addEventListener('click', todoEvents)
+
       newTodoDialog.addEventListener('submit', (e) => {
         e.preventDefault()
+
+        let title = e.target.elements.title.value
+        let desc = e.target.elements.description.value
+        let dueDate = e.target.elements.dueDate.value
+        let priority = e.target.elements.priority.value
+
+        let uuid = todoListHeading.dataset.projectId
+        let project = TodoManager.findProject(uuid)
+
+        let todo = TodoManager.addNewTodo({ title, desc, dueDate, priority }, project)
+        createTodo(todo)
+        newTodoDialog.close()
       })
 
     }
@@ -94,14 +113,16 @@ export const Display = (
     }
 
     function removeProject(e) {
-      console.log(e.target.parentNode.dataset.id)
-      console.log(todoListHeading.dataset.projectId)
       // if it's todos are currently listed
       if (e.target.parentNode.dataset.id == todoListHeading.dataset.projectId) {
         todoList.replaceChildren()
         createProjectTodosItems(TodoManager.getDefaultProject())
       }
       e.target.parentNode.remove()
+    }
+
+    function todoEvents(e) {
+
     }
 
     return { draw, createProjectItem }

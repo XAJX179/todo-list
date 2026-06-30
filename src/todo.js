@@ -4,6 +4,8 @@ export class Todo {
   description;
   dueDate;
   priority;
+  // TODO: add complete button
+  // isComplete;
   static allTodos = [];
 
   constructor(title, description, dueDate, priority) {
@@ -12,6 +14,7 @@ export class Todo {
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
+    // this.isComplete = false;
     Todo.addToAllList(this)
   }
 
