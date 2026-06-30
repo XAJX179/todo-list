@@ -6,7 +6,6 @@ export class Todo {
   priority;
   // TODO: add complete button
   // isComplete;
-  static allTodos = [];
 
   constructor(title, description, dueDate, priority) {
     this.uuid = crypto.randomUUID()
@@ -15,13 +14,5 @@ export class Todo {
     this.dueDate = dueDate;
     this.priority = priority;
     // this.isComplete = false;
-    Todo.addToAllList(this)
-  }
-
-  static find(uuid) {
-  }
-
-  static addToAllList(todo) {
-    this.allTodos.push(todo)
   }
 }

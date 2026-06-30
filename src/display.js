@@ -51,11 +51,13 @@ export const Display = (
       let todoItemDueDate = document.createElement('p')
       let todoItemPriority = document.createElement('p')
       let todoItemEditButton = document.createElement('button')
+      let todoItemDelButton = document.createElement('button')
       todoItem.append(todoItemHeading)
       todoItem.append(todoItemDescription)
       todoItem.append(todoItemDueDate)
       todoItem.append(todoItemPriority)
       todoItem.append(todoItemEditButton)
+      todoItem.append(todoItemDelButton)
       todoList.append(todoItem)
 
       todoItemHeading.textContent = todo.title
@@ -63,6 +65,9 @@ export const Display = (
       todoItemDueDate.textContent = todo.dueDate
       todoItemPriority.textContent = todo.priority
       todoItemEditButton.textContent = "Edit"
+      todoItemDelButton.textContent = "Delete"
+      todoItemDelButton.classList.add('del-btn')
+      todoItemEditButton.classList.add('edit-btn')
       todoItem.dataset.id = todo.uuid
       return todoItem
     }
@@ -113,8 +118,9 @@ export const Display = (
     }
 
     function removeProject(e) {
-      // if it's todos are currently listed
-      if (e.target.parentNode.dataset.id == todoListHeading.dataset.projectId) {
+      let id = e.target.parentNode.dataset.id
+      TodoManager.deleteProject(id)
+      if (id == todoListHeading.dataset.projectId) {
         todoList.replaceChildren()
         createProjectTodosItems(TodoManager.getDefaultProject())
       }
@@ -122,7 +128,16 @@ export const Display = (
     }
 
     function todoEvents(e) {
-
+      // console.log({ e })
+      // if (e.target.className == 'del-btn') {
+      //   console.log('delete')
+      //   let id = e.target.parentNode.dataset.id
+      //   TodoManager.deleteTodo(id, project)
+      // }
+      // else if (e.target.className == 'edit-btn') {
+      //   console.log('edit')
+      // } else if (e) {
+      // }
     }
 
     return { draw, createProjectItem }

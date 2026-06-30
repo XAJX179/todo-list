@@ -15,6 +15,10 @@ export class Project {
     this.todoList.push(todo)
   }
 
+  findTodo(todo) {
+    this.todoList.find((e) => e == todo)
+  }
+
   static find(uuid) {
     const index = this.allProjects.findIndex((proj) => proj.uuid == uuid)
     return this.allProjects[index]
@@ -22,5 +26,10 @@ export class Project {
 
   static addToAllList(todo) {
     this.allProjects.push(todo)
+  }
+
+  static delete(id) {
+    let index = Project.allProjects.findIndex((proj) => proj.uuid == id)
+    this.allProjects.splice(index, 1)
   }
 }

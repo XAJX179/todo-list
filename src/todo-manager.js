@@ -26,6 +26,9 @@ export const TodoManager = (
       Display.createProjectItem(project)
       return project;
     }
+    function deleteProject(id) {
+      Project.delete(id)
+    }
     function addNewTodo(data, project) {
       let todo = new Todo(data.title, data.desc, data.dueDate, data.priority)
       project.addTodo(todo)
@@ -36,6 +39,6 @@ export const TodoManager = (
       return defaultProj;
     }
 
-    return { setup, addNewProject, addNewTodo, findProject, getDefaultProject }
+    return { setup, addNewProject, deleteProject, addNewTodo, findProject, getDefaultProject }
   }
 )()
