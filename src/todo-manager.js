@@ -5,8 +5,9 @@ import './style.css'
 
 export const TodoManager = (
   () => {
+    let defaultProj = new Project('Default Project')
+
     function setup() {
-      let defaultProj = new Project('Default Project')
       let todo = new Todo('title1', 'a desc', '19/2/26', 'high',)
       let todo2 = new Todo('title2', 'a desc', '19/2/26', 'low',)
       let todo3 = new Todo('title3', 'a desc', '19/2/26', 'low',)
@@ -17,7 +18,18 @@ export const TodoManager = (
 
       Display.draw(Project.allProjects)
     }
+    function findProject(uuid) {
+      return Project.find(uuid)
+    }
+    function addNewProject(name) {
+      let project = new Project(name)
+      Display.createProjectItem(project)
+    }
 
-    return { setup }
+    function getDefaultProject() {
+      return defaultProj;
+    }
+
+    return { setup, addNewProject, findProject, getDefaultProject }
   }
 )()

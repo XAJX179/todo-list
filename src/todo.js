@@ -16,8 +16,6 @@ export class Todo {
   }
 
   static find(uuid) {
-    console.log(uuid)
-    console.log(this.allTodos)
   }
 
   static addToAllList(todo) {
