@@ -53,12 +53,14 @@ export const Display = (
       let todoItemPriority = document.createElement('p')
       let todoItemEditButton = document.createElement('button')
       let todoItemDelButton = document.createElement('button')
+      let todoItemCompleteButton = document.createElement('button')
       todoItem.append(todoItemHeading)
       todoItem.append(todoItemDescription)
       todoItem.append(todoItemDueDate)
       todoItem.append(todoItemPriority)
       todoItem.append(todoItemEditButton)
       todoItem.append(todoItemDelButton)
+      todoItem.append(todoItemCompleteButton)
       todoList.append(todoItem)
 
       todoItemHeading.textContent = todo.title
@@ -67,8 +69,10 @@ export const Display = (
       todoItemPriority.textContent = todo.priority
       todoItemEditButton.textContent = "Edit"
       todoItemDelButton.textContent = "Delete"
+      updateTodoComplete(todoItemCompleteButton, todo.isComplete)
       todoItemDelButton.classList.add('del-btn')
       todoItemEditButton.classList.add('edit-btn')
+      todoItemCompleteButton.classList.add('completion-btn')
       // todoItemHeading.classList.add('todo-heading')
       // todoItemDescription.classList.add('todo-description')
       // todoItemDueDate.classList.add('todo-due-date')
@@ -166,7 +170,14 @@ export const Display = (
         editTodoDialog.children[0].elements.dueDate.value = todo.dueDate
         editTodoDialog.children[0].elements.priority.value = todo.priority
         editTodoDialog.dataset.todoId = todo.uuid
-      } else if (e) {
+      } else if (e.target.className == 'completion-btn') {
+        let id = e.target.parentNode.dataset.id
+        let currProjectId = todoListHeading.dataset.projectId
+        let todo = TodoManager.toggleTodoCompletion(id, currProjectId)
+        console.log(todo)
+        let todoCompleteBtn = e.target
+        updateTodoComplete(todoCompleteBtn, todo.isComplete)
+        console.log('complete btn')
       }
     }
 
@@ -176,6 +187,14 @@ export const Display = (
       todoItem.children[1].textContent = todo.description
       todoItem.children[2].textContent = todo.dueDate
       todoItem.children[3].textContent = todo.priority
+    }
+
+    function updateTodoComplete(btn, isComplete) {
+      if (isComplete) {
+        btn.textContent = 'Incomplete'
+      } else {
+        btn.textContent = 'Complete'
+      }
     }
 
     return { draw, createProjectItem }

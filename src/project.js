@@ -33,6 +33,12 @@ export class Project {
     return todo
   }
 
+  toggleTodoCompletion(id) {
+    let todo = this.todoList.find((todo) => todo.uuid == id)
+    todo.isComplete = !todo.isComplete
+    return todo
+  }
+
   static find(uuid) {
     const index = this.allProjects.findIndex((proj) => proj.uuid == uuid)
     return this.allProjects[index]

@@ -53,10 +53,15 @@ export const TodoManager = (
       return project.updateTodo(todo_id, data)
     }
 
+    function toggleTodoCompletion(id, project_id) {
+      let project = findProject(project_id)
+      return project.toggleTodoCompletion(id)
+    }
+
     function getDefaultProject() {
       return defaultProj;
     }
 
-    return { setup, addNewProject, deleteProject, addNewTodo, deleteTodo, findProject, findTodo, updateTodo, getDefaultProject }
+    return { setup, addNewProject, deleteProject, addNewTodo, deleteTodo, findProject, findTodo, updateTodo, toggleTodoCompletion, getDefaultProject }
   }
 )()

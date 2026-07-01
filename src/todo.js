@@ -4,8 +4,7 @@ export class Todo {
   description;
   dueDate;
   priority;
-  // TODO: add complete button
-  // isComplete;
+  isComplete;
 
   constructor(title, description, dueDate, priority) {
     this.uuid = crypto.randomUUID()
@@ -13,6 +12,6 @@ export class Todo {
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    // this.isComplete = false;
+    this.isComplete = false;
   }
 }
