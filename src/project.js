@@ -15,8 +15,22 @@ export class Project {
     this.todoList.push(todo)
   }
 
-  findTodo(todo) {
-    this.todoList.find((e) => e == todo)
+  findTodo(id) {
+    return this.todoList.find((todo) => todo.uuid == id)
+  }
+
+  deleteTodo(id) {
+    let index = this.todoList.findIndex((todo) => todo.uuid == id)
+    this.todoList.splice(index, 1)
+  }
+
+  updateTodo(id, data) {
+    let todo = this.todoList.find((todo) => todo.uuid == id)
+    todo.title = data.title;
+    todo.description = data.desc;
+    todo.dueDate = data.dueDate
+    todo.priority = data.priority
+    return todo
   }
 
   static find(uuid) {

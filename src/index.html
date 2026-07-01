@@ -49,7 +49,35 @@
       </form>
       <button commandfor="new-todo-dialog" command="close">Close</button>
     </dialog>
+    <dialog id="edit-todo-dialog" closedby="any">
+      <form method="dialog">
+        <div>
+          <label for="title">Title: </label>
+          <input type="text" name="title" id="title" required>
+        </div>
+        <div>
+          <label for="todo-description">Description: </label>
+          <input type="text" name="description" id="todo-description" required>
+        </div>
 
+        <div>
+          <label for="todo-due-date">Due date: </label>
+          <input type="date" name="dueDate" id="todo-due-date" required>
+        </div>
+
+        <div>
+          <label for="todo-priority">Priority</label>
+          <select name="priority" id="todo-priority" required>
+            <option value="">Choose priority</option>
+            <option value="low">Low</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <button type="submit">Edit Todo</button>
+      </form>
+      <button commandfor="edit-todo-dialog" command="close">Close</button>
+    </dialog>
     <section class="projects">
       <h2>Projects</h2>
       <button class="new-button" command="show-modal" commandfor="new-project-dialog">New project</button>

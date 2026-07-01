@@ -9,6 +9,7 @@ export const Display = (
     // let newProjectButton = document.querySelector('.projects>.new-button')
     // let newTodoButton = document.querySelector('.todos>.new-button')
     let newTodoDialog = document.querySelector('#new-todo-dialog')
+    let editTodoDialog = document.querySelector('#edit-todo-dialog')
 
     function draw(projects) {
       projects.forEach(project => {
@@ -68,6 +69,12 @@ export const Display = (
       todoItemDelButton.textContent = "Delete"
       todoItemDelButton.classList.add('del-btn')
       todoItemEditButton.classList.add('edit-btn')
+      // todoItemHeading.classList.add('todo-heading')
+      // todoItemDescription.classList.add('todo-description')
+      // todoItemDueDate.classList.add('todo-due-date')
+      // todoItemPriority.classList.add('todo-priority')
+      todoItemEditButton.setAttribute('command', 'show-modal')
+      todoItemEditButton.setAttribute('commandfor', 'edit-todo-dialog')
       todoItem.dataset.id = todo.uuid
       return todoItem
     }
@@ -100,6 +107,22 @@ export const Display = (
         newTodoDialog.close()
       })
 
+      editTodoDialog.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        let title = e.target.elements.title.value
+        let desc = e.target.elements.description.value
+        let dueDate = e.target.elements.dueDate.value
+        let priority = e.target.elements.priority.value
+
+        let uuid = todoListHeading.dataset.projectId
+        let project = TodoManager.findProject(uuid)
+
+        let todo_id = e.target.parentElement.dataset.todoId
+        let todo = TodoManager.updateTodo(todo_id, { title, desc, dueDate, priority }, project)
+        updateTodo(todo)
+        editTodoDialog.close()
+      })
     }
 
     function projectEvents(e) {
@@ -128,16 +151,31 @@ export const Display = (
     }
 
     function todoEvents(e) {
-      // console.log({ e })
-      // if (e.target.className == 'del-btn') {
-      //   console.log('delete')
-      //   let id = e.target.parentNode.dataset.id
-      //   TodoManager.deleteTodo(id, project)
-      // }
-      // else if (e.target.className == 'edit-btn') {
-      //   console.log('edit')
-      // } else if (e) {
-      // }
+      if (e.target.className == 'del-btn') {
+        let id = e.target.parentNode.dataset.id
+        let currProjectId = todoListHeading.dataset.projectId
+        TodoManager.deleteTodo(id, currProjectId)
+        e.target.parentNode.remove()
+      }
+      else if (e.target.className == 'edit-btn') {
+        let id = e.target.parentNode.dataset.id
+        let currProjectId = todoListHeading.dataset.projectId
+        let todo = TodoManager.findTodo(id, currProjectId)
+        editTodoDialog.children[0].elements.title.value = todo.title
+        editTodoDialog.children[0].elements.description.value = todo.description
+        editTodoDialog.children[0].elements.dueDate.value = todo.dueDate
+        editTodoDialog.children[0].elements.priority.value = todo.priority
+        editTodoDialog.dataset.todoId = todo.uuid
+      } else if (e) {
+      }
+    }
+
+    function updateTodo(todo) {
+      let todoItem = document.querySelector(`li[data-id="${todo.uuid}"]`)
+      todoItem.children[0].textContent = todo.title
+      todoItem.children[1].textContent = todo.description
+      todoItem.children[2].textContent = todo.dueDate
+      todoItem.children[3].textContent = todo.priority
     }
 
     return { draw, createProjectItem }

@@ -18,27 +18,45 @@ export const TodoManager = (
 
       Display.draw(Project.allProjects)
     }
+
     function findProject(uuid) {
       return Project.find(uuid)
     }
+
     function addNewProject(name) {
       let project = new Project(name)
       Display.createProjectItem(project)
       return project;
     }
+
     function deleteProject(id) {
       Project.delete(id)
     }
+
+    function findTodo(id, project_id) {
+      let project = findProject(project_id)
+      return project.findTodo(id)
+    }
+
     function addNewTodo(data, project) {
       let todo = new Todo(data.title, data.desc, data.dueDate, data.priority)
       project.addTodo(todo)
       return todo;
     }
 
+    function deleteTodo(id, project_id) {
+      let project = findProject(project_id)
+      project.deleteTodo(id)
+    }
+
+    function updateTodo(todo_id, data, project) {
+      return project.updateTodo(todo_id, data)
+    }
+
     function getDefaultProject() {
       return defaultProj;
     }
 
-    return { setup, addNewProject, deleteProject, addNewTodo, findProject, getDefaultProject }
+    return { setup, addNewProject, deleteProject, addNewTodo, deleteTodo, findProject, findTodo, updateTodo, getDefaultProject }
   }
 )()
