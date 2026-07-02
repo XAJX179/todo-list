@@ -2,20 +2,21 @@ import { Todo } from "./todo.js"
 import { Project } from "./project.js"
 import { Display } from "./display.js"
 import './style.css'
+import { isDataStored, storageAvailable } from "./localStorage.js"
 
 export const TodoManager = (
   () => {
-    let defaultProj = new Project('Default Project')
+    let defaultProj;
 
     function setup() {
-      let todo = new Todo('title1', 'a desc', '2027-03-23', 'high',)
-      let todo2 = new Todo('title2', 'a desc', '2027-03-23', 'low',)
-      let todo3 = new Todo('title3', 'a desc', '2027-03-23', 'low',)
-      let proj2 = new Project('Default Project 2')
-      defaultProj.addTodo(todo);
-      defaultProj.addTodo(todo2);
-      proj2.addTodo(todo3)
-
+      if (storageAvailable() && isDataStored()) {
+        loadStorage()
+      } else if (storageAvailable()) {
+        defaultProj = new Project('Default Project')
+        localStorage.setItem('projects', JSON.stringify(Project.allProjects))
+      } else {
+        defaultProj = new Project('Default Project')
+      }
       Display.draw(Project.allProjects)
     }
 
@@ -26,11 +27,13 @@ export const TodoManager = (
     function addNewProject(name) {
       let project = new Project(name)
       Display.createProjectItem(project)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
       return project;
     }
 
     function deleteProject(id) {
       Project.delete(id)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
     }
 
     function findTodo(id, project_id) {
@@ -41,25 +44,38 @@ export const TodoManager = (
     function addNewTodo(data, project) {
       let todo = new Todo(data.title, data.desc, data.dueDate, data.priority)
       project.addTodo(todo)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
       return todo;
     }
 
     function deleteTodo(id, project_id) {
       let project = findProject(project_id)
       project.deleteTodo(id)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
     }
 
     function updateTodo(todo_id, data, project) {
-      return project.updateTodo(todo_id, data)
+      let result = project.updateTodo(todo_id, data)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
+      return result
     }
 
     function toggleTodoCompletion(id, project_id) {
       let project = findProject(project_id)
-      return project.toggleTodoCompletion(id)
+      let result = project.toggleTodoCompletion(id)
+      localStorage.setItem('projects', JSON.stringify(Project.allProjects))
+      return result
     }
 
     function getDefaultProject() {
       return defaultProj;
+    }
+
+    function loadStorage() {
+      let projects = localStorage.getItem('projects')
+      Project.allProjects = JSON.parse(projects)
+      Project.allProjects.forEach((proj) => Object.setPrototypeOf(proj, Project.prototype))
+      defaultProj = Project.allProjects[0]
     }
 
     return { setup, addNewProject, deleteProject, addNewTodo, deleteTodo, findProject, findTodo, updateTodo, toggleTodoCompletion, getDefaultProject }
